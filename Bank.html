@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bank Account Management System</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+        }
+        .container {
+            width: 400px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+        }
+        button {
+            background: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        h2 {
+            text-align: center;
+        }
+        .output {
+            margin-top: 10px;
+            background: #eee;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Bank Account Management</h2>
+
+    <input type="number" id="accNo" placeholder="Account Number">
+    <input type="text" id="name" placeholder="Account Holder Name">
+    <input type="number" id="balance" placeholder="Initial Balance">
+
+    <button onclick="createAccount()">Create Account</button>
+    <button onclick="deposit()">Deposit</button>
+    <button onclick="withdraw()">Withdraw</button>
+    <button onclick="displayAccounts()">Display Accounts</button>
+
+    <div class="output" id="output"></div>
+</div>
+
+<script>
+let accounts = [];
+
+function createAccount() {
+    let accNo = document.getElementById("accNo").value;
+    let name = document.getElementById("name").value;
+    let balance = Number(document.getElementById("balance").value);
+
+    if(accNo === "" || name === "") {
+        alert("Please fill all details");
+        return;
+    }
+
+    accounts.push({
+        accNo: accNo,
+        name: name,
+        balance: balance
+    });
+
+    document.getElementById("output").innerHTML = "Account created successfully!";
+}
+
+function deposit() {
+    let accNo = document.getElementById("accNo").value;
+    let amount = Number(prompt("Enter amount to deposit"));
+
+    for(let acc of accounts) {
+        if(acc.accNo == accNo) {
+            acc.balance += amount;
+            document.getElementById("output").innerHTML =
+                "Deposit successful. New Balance: " + acc.balance;
+            return;
+        }
+    }
+    document.getElementById("output").innerHTML = "Account not found!";
+}
+
+function withdraw() {
+    let accNo = document.getElementById("accNo").value;
+    let amount = Number(prompt("Enter amount to withdraw"));
+
+    for(let acc of accounts) {
+        if(acc.accNo == accNo) {
+            if(amount <= acc.balance) {
+                acc.balance -= amount;
+                document.getElementById("output").innerHTML =
+                    "Withdrawal successful. New Balance: " + acc.balance;
+            } else {
+                document.getElementById("output").innerHTML =
+                    "Insufficient balance!";
+            }
+            return;
+        }
+    }
+    document.getElementById("output").innerHTML = "Account not found!";
+}
+
+function displayAccounts() {
+    let result = "";
+    for(let acc of accounts) {
+        result += "<b>Account No:</b> " + acc.accNo + "<br>";
+        result += "<b>Name:</b> " + acc.name + "<br>";
+        result += "<b>Balance:</b> " + acc.balance + "<br><hr>";
+    }
+    document.getElementById("output").innerHTML =
+        result || "No accounts available!";
+}
+</script>
+
+</body>
+</html>
